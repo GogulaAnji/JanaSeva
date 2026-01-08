@@ -11,8 +11,10 @@ services:
       - key: NODE_ENV
         value: production
 
-  # Frontend Static Site
-  - type: static
+  # Frontend Web Service (served via Node)
+  - type: web
     name: janaseva-frontend
+    env: node
+    plan: free
     buildCommand: cd frontend && npm install && npm run build
-    staticPublishPath: frontend/dist
+    startCommand: npx serve -s frontend/dist
