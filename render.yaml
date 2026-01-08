@@ -12,7 +12,7 @@ services:
         value: production
 
   # Frontend Static Site
-  - type: static_site
+  - type: static
     name: janaseva-frontend
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/dist
