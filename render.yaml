@@ -1,12 +1,11 @@
 services:
-  # Backend API Service
+  # Backend API
   - type: web
     name: janaseva-backend
     env: node
-    region: singapore
     plan: free
-    buildCommand: npm install
-    startCommand: npm start
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
@@ -18,22 +17,15 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL
-        value: https://janaseva.onrender.com
-    rootDir: backend
+        value: https://janaseva-frontend.onrender.com
 
-  # Frontend Static Site
+  # Frontend Web Service (served via Node)
   - type: web
     name: janaseva-frontend
-    env: static
-    region: singapore
+    env: node
     plan: free
-    buildCommand: npm install && npm run build
-    staticPublishPath: dist
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: npx serve -s frontend/dist
     envVars:
       - key: VITE_API_URL
-        value: https://janaseva-backend.onrender.com
-    rootDir: frontend
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+        value: https://janaseva-backend.onrender.com/api
