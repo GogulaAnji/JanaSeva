@@ -1,39 +1,18 @@
 services:
-  # Backend API Service
+  # Backend API
   - type: web
     name: janaseva-backend
     env: node
-    region: singapore
     plan: free
-    buildCommand: npm install
-    startCommand: npm start
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 10000
-      - key: MONGODB_URI
-        sync: false
-      - key: JWT_SECRET
-        generateValue: true
-      - key: CORS_ORIGIN
-        value: https://janaseva.onrender.com
-    rootDir: backend
 
   # Frontend Static Site
-  - type: web
+  - type: static
     name: janaseva-frontend
-    env: static
-    plan: free
-    buildCommand: npm install && npm run build
-    staticPublishPath: dist
-    envVars:
-      - key: VITE_API_URL
-        value: https://janaseva-backend.onrender.com
-    rootDir: frontend
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
-
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
