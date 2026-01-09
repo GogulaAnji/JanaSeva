@@ -28,6 +28,15 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Profile from './pages/Profile';
 
+// Marketplace Pages
+import ProduceMarketplace from './pages/ProduceMarketplace';
+import ServiceMarketplace from './pages/ServiceMarketplace';
+import PostProduct from './pages/PostProduct';
+import PostService from './pages/PostService';
+import ChatWindow from './pages/ChatWindow';
+import FAQ from './pages/FAQ';
+import Referrals from './pages/Referrals';
+
 function App() {
   return (
     <LanguageProvider>
@@ -64,6 +73,14 @@ function App() {
                   {/* Community */}
                   <Route path="/community" element={<Community />} />
 
+                  {/* Referrals */}
+                  <Route path="/referrals" element={<Referrals />} />
+
+                  {/* Marketplace */}
+                  <Route path="/marketplace" element={<ProduceMarketplace />} />
+                  <Route path="/services" element={<ServiceMarketplace />} />
+                  <Route path="/faq" element={<FAQ />} />
+
                   {/* Protected Routes */}
                   <Route
                     path="/dashboard"
@@ -78,6 +95,30 @@ function App() {
                     element={
                       <PrivateRoute>
                         <Profile />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/post-product"
+                    element={
+                      <PrivateRoute>
+                        <PostProduct />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/post-service"
+                    element={
+                      <PrivateRoute>
+                        <PostService />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/chat/:chatId"
+                    element={
+                      <PrivateRoute>
+                        <ChatWindow />
                       </PrivateRoute>
                     }
                   />

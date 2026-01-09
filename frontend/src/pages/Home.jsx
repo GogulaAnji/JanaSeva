@@ -177,6 +177,61 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+
+            {/* FAQ Section */}
+            <section className="faq-section">
+                <div className="container">
+                    <div className="section-header text-center">
+                        <h2 className="section-title">Frequently Asked Questions</h2>
+                        <p className="section-description">
+                            Quick answers to common questions about JanaSeva
+                        </p>
+                    </div>
+                    <div className="faq-grid">
+                        <div className="faq-item">
+                            <details>
+                                <summary>What is JanaSeva?</summary>
+                                <p>JanaSeva is a comprehensive platform connecting farmers, workers, doctors, and communities across India. We help farmers sell produce directly, workers find jobs, and people access essential services without middlemen.</p>
+                            </details>
+                        </div>
+                        <div className="faq-item">
+                            <details>
+                                <summary>Is JanaSeva free to use?</summary>
+                                <p>Yes! JanaSeva is completely free for all users. No fees, no commissions. Farmers keep 100% of their earnings, and buyers pay only the agreed price.</p>
+                            </details>
+                        </div>
+                        <div className="faq-item">
+                            <details>
+                                <summary>How do I post products or services?</summary>
+                                <p>After logging in, click the "Post Product" or "Post Service" button. Upload photos, add details and pricing, then publish. Your listing goes live immediately!</p>
+                            </details>
+                        </div>
+                        <div className="faq-item">
+                            <details>
+                                <summary>How does pricing work for workers?</summary>
+                                <p>Workers can set flexible pricing: hourly rates (₹200/hr), daily rates (₹500/day), per-job rates, or custom negotiable pricing. You can set multiple options!</p>
+                            </details>
+                        </div>
+                        <div className="faq-item">
+                            <details>
+                                <summary>Can I negotiate prices?</summary>
+                                <p>Absolutely! Use the chat feature to discuss prices, quantities, and terms directly with farmers and workers. Many are open to negotiation, especially for bulk orders.</p>
+                            </details>
+                        </div>
+                        <div className="faq-item">
+                            <details>
+                                <summary>How do buyers contact me?</summary>
+                                <p>When someone is interested, you'll receive a notification. They can call you directly using the call button or start a chat to discuss details and negotiate.</p>
+                            </details>
+                        </div>
+                    </div>
+                    <div className="faq-footer">
+                        <Link to="/faq" className="btn btn-outline">
+                            View All FAQs
+                        </Link>
+                    </div>
+                </div>
+            </section>
         </div>
     );
 };

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { getTranslation } from '../translations';
-import { FiMenu, FiX, FiUser, FiLogOut, FiHome, FiBriefcase, FiUsers, FiHeart } from 'react-icons/fi';
+import { FiMenu, FiX, FiUser, FiLogOut, FiHome, FiBriefcase, FiUsers, FiHeart, FiGift } from 'react-icons/fi';
 import LanguageSwitcher from './LanguageSwitcher';
 import './Navbar.css';
 
@@ -39,6 +39,9 @@ const Navbar = () => {
                     <div className="navbar-links desktop-only">
                         <Link to="/" className="nav-link">
                             <FiHome /> {t('nav.home')}
+                        </Link>
+                        <Link to="/referrals" className="nav-link">
+                            <FiGift /> Referrals
                         </Link>
                         <Link to="/workers" className="nav-link">
                             <FiUsers /> {t('nav.workers')}
@@ -95,6 +98,9 @@ const Navbar = () => {
                     <div className="mobile-menu">
                         <Link to="/" className="mobile-link" onClick={() => setIsOpen(false)}>
                             <FiHome /> {t('nav.home')}
+                        </Link>
+                        <Link to="/referrals" className="mobile-link" onClick={() => setIsOpen(false)}>
+                            <FiGift /> Referrals
                         </Link>
                         <Link to="/workers" className="mobile-link" onClick={() => setIsOpen(false)}>
                             <FiUsers /> {t('nav.workers')}

@@ -20,6 +20,10 @@ import appointmentRoutes from './routes/appointment.routes.js';
 import communityRoutes from './routes/community.routes.js';
 import aiRoutes from './routes/ai.routes.js';
 import adminRoutes from './routes/admin.routes.js';
+import produceRoutes from './routes/produce.routes.js';
+import chatRoutes from './routes/chat.routes.js';
+import notificationRoutes from './routes/notification.routes.js';
+import serviceRoutes from './routes/service.routes.js';
 
 // Load environment variables
 dotenv.config();
@@ -152,6 +156,18 @@ app.use('/api/ai', aiRoutes);
 
 // Admin Routes
 app.use('/api/admin', adminRoutes);
+
+// Produce/Marketplace Routes
+app.use('/api/produce', produceRoutes);
+
+// Service Routes
+app.use('/api/services', serviceRoutes);
+
+// Chat Routes
+app.use('/api/chats', chatRoutes);
+
+// Notification Routes
+app.use('/api/notifications', notificationRoutes);
 
 // ============================================
 // ERROR HANDLING
