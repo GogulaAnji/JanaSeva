@@ -223,15 +223,6 @@ const Jobs = () => {
 
                 {/* Jobs List */}
                 <div className="jobs-section">
-                    <div className="section-header">
-                        <h2>
-                            {selectedCategory === 'all'
-                                ? 'All Jobs'
-                                : jobCategories.find(c => c.id === selectedCategory)?.name + ' Jobs'}
-                        </h2>
-                        <span className="count">{filteredJobs.length} jobs</span>
-                    </div>
-
                     {loading ? (
                         <div className="loading">Loading jobs...</div>
                     ) : filteredJobs.length === 0 ? (
@@ -242,61 +233,275 @@ const Jobs = () => {
                             </button>
                         </div>
                     ) : (
-                        <div className="jobs-grid">
-                            {filteredJobs.map(job => (
-                                <div key={job._id} className="job-card card">
-                                    <div className="job-header">
-                                        <div>
-                                            <h3>{job.title}</h3>
-                                            <p className="company-name">{job.company}</p>
-                                        </div>
-                                        {job.urgent && (
-                                            <span className="urgent-badge">🔥 Urgent</span>
-                                        )}
-                                    </div>
-
-                                    <div className="job-meta">
-                                        <span className="job-type-badge">{job.jobType}</span>
-                                        <span className="category-badge">
-                                            {jobCategories.find(c => c.id === job.category)?.icon}
-                                            {' '}
-                                            {job.category}
+                        <>
+                            {/* Permanent Jobs Section */}
+                            {filteredJobs.filter(job => job.jobType === 'full-time').length > 0 && (
+                                <div style={{ marginBottom: '3rem' }}>
+                                    <div className="section-header">
+                                        <h2>💼 Permanent Jobs</h2>
+                                        <span className="count">
+                                            {filteredJobs.filter(job => job.jobType === 'full-time').length} jobs
                                         </span>
                                     </div>
+                                    <div className="jobs-grid">
+                                        {filteredJobs.filter(job => job.jobType === 'full-time').map(job => (
+                                            <div key={job._id} className="job-card card">
+                                                <div className="job-header">
+                                                    <div>
+                                                        <h3>{job.title}</h3>
+                                                        <p className="company-name">{job.company}</p>
+                                                    </div>
+                                                    {job.urgent && (
+                                                        <span className="urgent-badge">🔥 Urgent</span>
+                                                    )}
+                                                </div>
 
-                                    <p className="job-description">{job.description}</p>
+                                                <div className="job-meta">
+                                                    <span className="job-type-badge">{job.jobType}</span>
+                                                    <span className="category-badge">
+                                                        {jobCategories.find(c => c.id === job.category)?.icon}
+                                                        {' '}
+                                                        {job.category}
+                                                    </span>
+                                                </div>
 
-                                    <div className="job-details">
-                                        <div className="detail-item">
-                                            <FiMapPin />
-                                            <span>{job.location?.city}, {job.location?.district}</span>
-                                        </div>
-                                        <div className="detail-item">
-                                            <FiDollarSign />
-                                            <span>
-                                                ₹{job.salary?.min}-{job.salary?.max}/{job.salary?.period}
-                                            </span>
-                                        </div>
-                                        <div className="detail-item">
-                                            <FiClock />
-                                            <span>{getTimeAgo(job.postedDate)}</span>
-                                        </div>
-                                    </div>
+                                                <p className="job-description">{job.description}</p>
 
-                                    <div className="job-footer">
-                                        <Link
-                                            to={`/jobs/${job._id}`}
-                                            className="btn btn-primary btn-sm"
-                                        >
-                                            Apply Now
-                                        </Link>
-                                        <button className="btn btn-outline btn-sm">
-                                            Save
-                                        </button>
+                                                <div className="job-details">
+                                                    <div className="detail-item">
+                                                        <FiMapPin />
+                                                        <span>{job.location?.city}, {job.location?.district}</span>
+                                                    </div>
+                                                    <div className="detail-item">
+                                                        <FiDollarSign />
+                                                        <span>
+                                                            ₹{job.salary?.min}-{job.salary?.max}/{job.salary?.period}
+                                                        </span>
+                                                    </div>
+                                                    <div className="detail-item">
+                                                        <FiClock />
+                                                        <span>{getTimeAgo(job.postedDate)}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="job-footer">
+                                                    <Link
+                                                        to={`/jobs/${job._id}`}
+                                                        className="btn btn-primary btn-sm"
+                                                    >
+                                                        Apply Now
+                                                    </Link>
+                                                    <button className="btn btn-outline btn-sm">
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+                            )}
+
+                            {/* Part-Time Jobs Section */}
+                            {filteredJobs.filter(job => job.jobType === 'part-time').length > 0 && (
+                                <div style={{ marginBottom: '3rem' }}>
+                                    <div className="section-header">
+                                        <h2>⏰ Part-Time Jobs</h2>
+                                        <span className="count">
+                                            {filteredJobs.filter(job => job.jobType === 'part-time').length} jobs
+                                        </span>
+                                    </div>
+                                    <div className="jobs-grid">
+                                        {filteredJobs.filter(job => job.jobType === 'part-time').map(job => (
+                                            <div key={job._id} className="job-card card">
+                                                <div className="job-header">
+                                                    <div>
+                                                        <h3>{job.title}</h3>
+                                                        <p className="company-name">{job.company}</p>
+                                                    </div>
+                                                    {job.urgent && (
+                                                        <span className="urgent-badge">🔥 Urgent</span>
+                                                    )}
+                                                </div>
+
+                                                <div className="job-meta">
+                                                    <span className="job-type-badge">{job.jobType}</span>
+                                                    <span className="category-badge">
+                                                        {jobCategories.find(c => c.id === job.category)?.icon}
+                                                        {' '}
+                                                        {job.category}
+                                                    </span>
+                                                </div>
+
+                                                <p className="job-description">{job.description}</p>
+
+                                                <div className="job-details">
+                                                    <div className="detail-item">
+                                                        <FiMapPin />
+                                                        <span>{job.location?.city}, {job.location?.district}</span>
+                                                    </div>
+                                                    <div className="detail-item">
+                                                        <FiDollarSign />
+                                                        <span>
+                                                            ₹{job.salary?.min}-{job.salary?.max}/{job.salary?.period}
+                                                        </span>
+                                                    </div>
+                                                    <div className="detail-item">
+                                                        <FiClock />
+                                                        <span>{getTimeAgo(job.postedDate)}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="job-footer">
+                                                    <Link
+                                                        to={`/jobs/${job._id}`}
+                                                        className="btn btn-primary btn-sm"
+                                                    >
+                                                        Apply Now
+                                                    </Link>
+                                                    <button className="btn btn-outline btn-sm">
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Daily/Temporary Jobs Section */}
+                            {filteredJobs.filter(job => job.jobType === 'daily' || job.jobType === 'temporary').length > 0 && (
+                                <div style={{ marginBottom: '3rem' }}>
+                                    <div className="section-header">
+                                        <h2>📅 Daily & Temporary Jobs</h2>
+                                        <span className="count">
+                                            {filteredJobs.filter(job => job.jobType === 'daily' || job.jobType === 'temporary').length} jobs
+                                        </span>
+                                    </div>
+                                    <div className="jobs-grid">
+                                        {filteredJobs.filter(job => job.jobType === 'daily' || job.jobType === 'temporary').map(job => (
+                                            <div key={job._id} className="job-card card">
+                                                <div className="job-header">
+                                                    <div>
+                                                        <h3>{job.title}</h3>
+                                                        <p className="company-name">{job.company}</p>
+                                                    </div>
+                                                    {job.urgent && (
+                                                        <span className="urgent-badge">🔥 Urgent</span>
+                                                    )}
+                                                </div>
+
+                                                <div className="job-meta">
+                                                    <span className="job-type-badge">{job.jobType}</span>
+                                                    <span className="category-badge">
+                                                        {jobCategories.find(c => c.id === job.category)?.icon}
+                                                        {' '}
+                                                        {job.category}
+                                                    </span>
+                                                </div>
+
+                                                <p className="job-description">{job.description}</p>
+
+                                                <div className="job-details">
+                                                    <div className="detail-item">
+                                                        <FiMapPin />
+                                                        <span>{job.location?.city}, {job.location?.district}</span>
+                                                    </div>
+                                                    <div className="detail-item">
+                                                        <FiDollarSign />
+                                                        <span>
+                                                            ₹{job.salary?.min}-{job.salary?.max}/{job.salary?.period}
+                                                        </span>
+                                                    </div>
+                                                    <div className="detail-item">
+                                                        <FiClock />
+                                                        <span>{getTimeAgo(job.postedDate)}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="job-footer">
+                                                    <Link
+                                                        to={`/jobs/${job._id}`}
+                                                        className="btn btn-primary btn-sm"
+                                                    >
+                                                        Apply Now
+                                                    </Link>
+                                                    <button className="btn btn-outline btn-sm">
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Contract Jobs Section */}
+                            {filteredJobs.filter(job => job.jobType === 'contract').length > 0 && (
+                                <div style={{ marginBottom: '3rem' }}>
+                                    <div className="section-header">
+                                        <h2>📝 Contract Jobs</h2>
+                                        <span className="count">
+                                            {filteredJobs.filter(job => job.jobType === 'contract').length} jobs
+                                        </span>
+                                    </div>
+                                    <div className="jobs-grid">
+                                        {filteredJobs.filter(job => job.jobType === 'contract').map(job => (
+                                            <div key={job._id} className="job-card card">
+                                                <div className="job-header">
+                                                    <div>
+                                                        <h3>{job.title}</h3>
+                                                        <p className="company-name">{job.company}</p>
+                                                    </div>
+                                                    {job.urgent && (
+                                                        <span className="urgent-badge">🔥 Urgent</span>
+                                                    )}
+                                                </div>
+
+                                                <div className="job-meta">
+                                                    <span className="job-type-badge">{job.jobType}</span>
+                                                    <span className="category-badge">
+                                                        {jobCategories.find(c => c.id === job.category)?.icon}
+                                                        {' '}
+                                                        {job.category}
+                                                    </span>
+                                                </div>
+
+                                                <p className="job-description">{job.description}</p>
+
+                                                <div className="job-details">
+                                                    <div className="detail-item">
+                                                        <FiMapPin />
+                                                        <span>{job.location?.city}, {job.location?.district}</span>
+                                                    </div>
+                                                    <div className="detail-item">
+                                                        <FiDollarSign />
+                                                        <span>
+                                                            ₹{job.salary?.min}-{job.salary?.max}/{job.salary?.period}
+                                                        </span>
+                                                    </div>
+                                                    <div className="detail-item">
+                                                        <FiClock />
+                                                        <span>{getTimeAgo(job.postedDate)}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="job-footer">
+                                                    <Link
+                                                        to={`/jobs/${job._id}`}
+                                                        className="btn btn-primary btn-sm"
+                                                    >
+                                                        Apply Now
+                                                    </Link>
+                                                    <button className="btn btn-outline btn-sm">
+                                                        Save
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
 
