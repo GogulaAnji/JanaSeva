@@ -129,6 +129,12 @@ const Farmers = () => {
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
+                    <button
+                        className="btn btn-primary"
+                        style={{ whiteSpace: 'nowrap' }}
+                    >
+                        + Post Product
+                    </button>
                 </div>
 
                 {/* Category Filter */}

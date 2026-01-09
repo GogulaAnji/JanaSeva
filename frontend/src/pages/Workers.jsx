@@ -154,6 +154,12 @@ const Workers = () => {
                             onChange={(e) => setLocationSearch(e.target.value)}
                         />
                     </div>
+                    <button
+                        className="btn btn-primary"
+                        style={{ whiteSpace: 'nowrap' }}
+                    >
+                        + Post Service
+                    </button>
                     {locationPermission !== 'granted' && (
                         <button
                             className="btn btn-outline btn-sm location-btn"
