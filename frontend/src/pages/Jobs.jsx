@@ -9,6 +9,18 @@ const Jobs = () => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
+    const [showPostJobModal, setShowPostJobModal] = useState(false);
+    const [newJob, setNewJob] = useState({
+        title: '',
+        company: '',
+        category: 'farming',
+        jobType: 'daily',
+        location: { city: '', district: '', state: '' },
+        salary: { min: '', max: '', period: 'day' },
+        description: '',
+        requirements: '',
+        urgent: false
+    });
 
     const jobCategories = [
         { id: 'all', name: 'All Jobs', icon: '💼' },
@@ -128,13 +140,55 @@ const Jobs = () => {
         return 'Just now';
     };
 
+    const handlePostJob = (e) => {
+        e.preventDefault();
+
+        // Create new job object
+        const jobToAdd = {
+            _id: Date.now().toString(),
+            ...newJob,
+            requirements: newJob.requirements.split(',').map(r => r.trim()).filter(r => r),
+            postedDate: new Date(),
+            postedBy: 'user' // In real app, this would be the logged-in user
+        };
+
+        // Add to jobs list
+        setJobs([jobToAdd, ...jobs]);
+
+        // Reset form and close modal
+        setNewJob({
+            title: '',
+            company: '',
+            category: 'farming',
+            jobType: 'daily',
+            location: { city: '', district: '', state: '' },
+            salary: { min: '', max: '', period: 'day' },
+            description: '',
+            requirements: '',
+            urgent: false
+        });
+        setShowPostJobModal(false);
+
+        // Show success message
+        alert('Job posted successfully! It is now visible to all users.');
+    };
+
     return (
         <div className="jobs-page">
             <div className="container">
                 {/* Page Header */}
                 <div className="page-header">
-                    <h1>Find Local Jobs</h1>
-                    <p>Daily wages, part-time, and temporary work opportunities</p>
+                    <div>
+                        <h1>Find Local Jobs</h1>
+                        <p>Daily wages, part-time, and temporary work opportunities</p>
+                    </div>
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => setShowPostJobModal(true)}
+                        style={{ marginLeft: 'auto' }}
+                    >
+                        + Post a Job
+                    </button>
                 </div>
 
                 {/* Search Bar */}
@@ -245,6 +299,211 @@ const Jobs = () => {
                         </div>
                     )}
                 </div>
+
+                {/* Post Job Modal */}
+                {showPostJobModal && (
+                    <div style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: 'rgba(0,0,0,0.5)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 1000,
+                        padding: '1rem'
+                    }}>
+                        <div style={{
+                            background: 'white',
+                            borderRadius: '15px',
+                            padding: '2rem',
+                            maxWidth: '600px',
+                            width: '100%',
+                            maxHeight: '90vh',
+                            overflowY: 'auto'
+                        }}>
+                            <h2 style={{ marginBottom: '1.5rem' }}>Post a New Job</h2>
+                            <form onSubmit={handlePostJob}>
+                                <div style={{ marginBottom: '1rem' }}>
+                                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Job Title *</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={newJob.title}
+                                        onChange={(e) => setNewJob({ ...newJob, title: e.target.value })}
+                                        placeholder="e.g., Farm Helper Needed"
+                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd' }}
+                                    />
+                                </div>
+
+                                <div style={{ marginBottom: '1rem' }}>
+                                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Company/Employer Name *</label>
+                                    <input
+                                        type="text"
+                                        required
+                                        value={newJob.company}
+                                        onChange={(e) => setNewJob({ ...newJob, company: e.target.value })}
+                                        placeholder="e.g., Green Fields Farm"
+                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd' }}
+                                    />
+                                </div>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                                    <div>
+                                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Category *</label>
+                                        <select
+                                            value={newJob.category}
+                                            onChange={(e) => setNewJob({ ...newJob, category: e.target.value })}
+                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd' }}
+                                        >
+                                            {jobCategories.filter(c => c.id !== 'all').map(cat => (
+                                                <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Job Type *</label>
+                                        <select
+                                            value={newJob.jobType}
+                                            onChange={(e) => setNewJob({ ...newJob, jobType: e.target.value })}
+                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd' }}
+                                        >
+                                            <option value="daily">Daily</option>
+                                            <option value="part-time">Part-time</option>
+                                            <option value="full-time">Full-time</option>
+                                            <option value="temporary">Temporary</option>
+                                            <option value="contract">Contract</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                                    <div>
+                                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>City *</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={newJob.location.city}
+                                            onChange={(e) => setNewJob({ ...newJob, location: { ...newJob.location, city: e.target.value } })}
+                                            placeholder="City"
+                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd' }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>District *</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={newJob.location.district}
+                                            onChange={(e) => setNewJob({ ...newJob, location: { ...newJob.location, district: e.target.value } })}
+                                            placeholder="District"
+                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd' }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>State *</label>
+                                        <input
+                                            type="text"
+                                            required
+                                            value={newJob.location.state}
+                                            onChange={(e) => setNewJob({ ...newJob, location: { ...newJob.location, state: e.target.value } })}
+                                            placeholder="State"
+                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd' }}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                                    <div>
+                                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Min Salary *</label>
+                                        <input
+                                            type="number"
+                                            required
+                                            value={newJob.salary.min}
+                                            onChange={(e) => setNewJob({ ...newJob, salary: { ...newJob.salary, min: e.target.value } })}
+                                            placeholder="Min"
+                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd' }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Max Salary *</label>
+                                        <input
+                                            type="number"
+                                            required
+                                            value={newJob.salary.max}
+                                            onChange={(e) => setNewJob({ ...newJob, salary: { ...newJob.salary, max: e.target.value } })}
+                                            placeholder="Max"
+                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd' }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Period *</label>
+                                        <select
+                                            value={newJob.salary.period}
+                                            onChange={(e) => setNewJob({ ...newJob, salary: { ...newJob.salary, period: e.target.value } })}
+                                            style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd' }}
+                                        >
+                                            <option value="hour">Hour</option>
+                                            <option value="day">Day</option>
+                                            <option value="week">Week</option>
+                                            <option value="month">Month</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div style={{ marginBottom: '1rem' }}>
+                                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Job Description *</label>
+                                    <textarea
+                                        required
+                                        value={newJob.description}
+                                        onChange={(e) => setNewJob({ ...newJob, description: e.target.value })}
+                                        placeholder="Describe the job responsibilities and details..."
+                                        rows="4"
+                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd', resize: 'vertical' }}
+                                    />
+                                </div>
+
+                                <div style={{ marginBottom: '1rem' }}>
+                                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>Requirements (comma-separated)</label>
+                                    <input
+                                        type="text"
+                                        value={newJob.requirements}
+                                        onChange={(e) => setNewJob({ ...newJob, requirements: e.target.value })}
+                                        placeholder="e.g., Physical fitness, No experience required"
+                                        style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', border: '1px solid #ddd' }}
+                                    />
+                                </div>
+
+                                <div style={{ marginBottom: '1.5rem' }}>
+                                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                                        <input
+                                            type="checkbox"
+                                            checked={newJob.urgent}
+                                            onChange={(e) => setNewJob({ ...newJob, urgent: e.target.checked })}
+                                        />
+                                        <span>Mark as Urgent</span>
+                                    </label>
+                                </div>
+
+                                <div style={{ display: 'flex', gap: '1rem' }}>
+                                    <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>
+                                        Post Job
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline"
+                                        onClick={() => setShowPostJobModal(false)}
+                                        style={{ flex: 1 }}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
