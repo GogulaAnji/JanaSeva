@@ -1,12 +1,29 @@
-import { useState } from 'react';
-import { FiGift, FiCopy, FiShare2, FiTrendingUp, FiAward, FiUsers } from 'react-icons/fi';
+import { useState, useEffect } from 'react';
+import { FiGift, FiCopy, FiShare2, FiTrendingUp, FiAward, FiUsers, FiCheck } from 'react-icons/fi';
 import { toast } from 'react-toastify';
+import { useAuth } from '../context/AuthContext';
 
 const Referrals = () => {
-    const [referralCode] = useState('JANA' + Math.random().toString(36).substring(2, 8).toUpperCase());
+    const { user } = useAuth();
+    const [referralCode, setReferralCode] = useState('');
+    const [inputReferralCode, setInputReferralCode] = useState('');
     const [coins, setCoins] = useState(0);
     const [referrals, setReferrals] = useState(0);
     const [rank, setRank] = useState(0);
+    const [hasUsedReferral, setHasUsedReferral] = useState(false);
+
+    // Generate unique referral code based on user
+    useEffect(() => {
+        if (user) {
+            // Create unique code from user ID or email
+            const uniqueCode = 'JANA' + user._id?.substring(user._id.length - 6).toUpperCase() ||
+                'JANA' + Math.random().toString(36).substring(2, 8).toUpperCase();
+            setReferralCode(uniqueCode);
+        } else {
+            // For non-logged in users, generate temporary code
+            setReferralCode('JANA' + Math.random().toString(36).substring(2, 8).toUpperCase());
+        }
+    }, [user]);
 
     const copyReferralCode = () => {
         navigator.clipboard.writeText(referralCode);
@@ -25,6 +42,36 @@ const Referrals = () => {
             navigator.clipboard.writeText(shareText);
             toast.success('Share text copied to clipboard!');
         }
+    };
+
+    const applyReferralCode = () => {
+        if (!inputReferralCode.trim()) {
+            toast.error('Please enter a referral code');
+            return;
+        }
+
+        if (inputReferralCode.toUpperCase() === referralCode) {
+            toast.error('You cannot use your own referral code!');
+            return;
+        }
+
+        if (hasUsedReferral) {
+            toast.warning('You have already used a referral code!');
+            return;
+        }
+
+        // Validate referral code format
+        if (!inputReferralCode.toUpperCase().startsWith('JANA')) {
+            toast.error('Invalid referral code format');
+            return;
+        }
+
+        // TODO: Send to backend API to validate and apply referral
+        // For now, simulate success
+        setHasUsedReferral(true);
+        setCoins(coins + 10); // Bonus coins for using referral
+        toast.success(`Referral code applied! You earned 10 bonus coins! 🎉`);
+        setInputReferralCode('');
     };
 
     return (
@@ -102,6 +149,61 @@ const Referrals = () => {
                     </button>
                 </div>
             </div>
+
+            {/* Enter Referral Code Section */}
+            {!hasUsedReferral && (
+                <div className="card" style={{ padding: '2rem', marginBottom: '2rem', background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', color: 'white' }}>
+                    <h2 style={{ marginBottom: '1rem', color: 'white' }}>Have a Referral Code?</h2>
+                    <p style={{ marginBottom: '1.5rem', opacity: 0.9 }}>Enter a friend's referral code to earn 10 bonus coins!</p>
+                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <input
+                            type="text"
+                            value={inputReferralCode}
+                            onChange={(e) => setInputReferralCode(e.target.value.toUpperCase())}
+                            placeholder="Enter code (e.g., JANAABC123)"
+                            style={{
+                                flex: 1,
+                                minWidth: '200px',
+                                padding: '1rem',
+                                borderRadius: '10px',
+                                border: '2px solid white',
+                                fontSize: '1.1rem',
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                                letterSpacing: '1px',
+                                textTransform: 'uppercase'
+                            }}
+                        />
+                        <button
+                            onClick={applyReferralCode}
+                            className="btn"
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                background: 'white',
+                                color: '#f5576c',
+                                fontWeight: 'bold',
+                                padding: '1rem 2rem'
+                            }}
+                        >
+                            <FiCheck /> Apply Code
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {hasUsedReferral && (
+                <div className="card" style={{ padding: '2rem', marginBottom: '2rem', background: '#d4edda', border: '2px solid #28a745' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: '#155724' }}>
+                        <FiCheck size={30} style={{ color: '#28a745' }} />
+                        <div>
+                            <h3 style={{ margin: 0, color: '#155724' }}>Referral Code Applied!</h3>
+                            <p style={{ margin: '0.5rem 0 0 0', color: '#155724' }}>You've earned your bonus coins. Start referring friends to earn more!</p>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* How to Earn Section */}
             <div className="card" style={{ padding: '2rem', marginBottom: '2rem' }}>
